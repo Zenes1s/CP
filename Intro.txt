@@ -1,1 +1,1 @@
-Collection of useful CP related materials.
+Collection of useful CP related materials and algorithms.
