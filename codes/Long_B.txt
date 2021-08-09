@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+int parity(int x) {
+   int y;
+   y=x^(x>>1);
+   y=y^(y>>2);
+   y=y^(y>>4);
+   y=y^(y>>8);
+   y=y^(y>>16);
+   return y&1;
+}
+int main()
+{
+    long long int t;
+    scanf("%lld",&t);
+    while(t--)
+    {
+        long long int n,q;
+        scanf("%lld %lld",&n,&q);
+        long long int a[n];
+        for(int i=0;i<n;i++)
+        scanf("%lld",&a[i]);
+        long long int odd=0;
+        long long int even=0;
+        for(int i=0;i<n;i++)
+        {
+            long long int x=parity(a[i]);
+            if(x%2==0)
+            even++;
+            else
+            odd++;
+        }
+        long long int y=parity(a[0]);
+        while(q--)
+        {
+            long long int p;
+            scanf("%lld",&p);
+            long long int check=p^a[0];
+            if(parity(check)%2==y%2)
+            printf("%lld %lld",even,odd);
+            else
+            printf("%lld %lld",odd,even);
+        }
+    }
+    return 0;
+}

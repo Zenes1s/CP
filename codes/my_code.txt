@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+int32_t main()
+{
+    int total_books,library,days_of_scanning;
+    cin>>total_books>>library>>days_of_scanning;
+    int *score=new int[total_books];
+    for(int i=0;i<total_books;i++)
+    cin>>score[i];
+    vector<pair<int,int>> v,v1,v2;
+    for(int i=0;i<total_books;i++)
+    v.push_back(make_pair(i,score[i]));
+    sort(v.begin(),v.end());
+    int *books=new int*[library];
+    int k=0;
+    int m=library;
+    int *sum=new int[library];
+    while(library--)
+    {
+        int lib_book,signup,ship;
+        cin>>lib_book>>signup>>ship;
+        v2.push_back(make_pair(signup,ship));
+        books[k]=new books[lib_book];
+        for(int i=0;i<lib_book;i++)
+        {
+        cin>>books[k][i];
+        sum[k]+=score[books[k][i]];
+        }
+        sort(books[k],books[k]+lib_book,greater<>());
+        k++;
+        v1.push_back(make_pair(k,sum[k]));
+    }
+    sort(v1.begin(),v1.end());
+    int temp;
+    vector<int> sign_up_order;
+    for(int i=v1.size()-1;i>=0;i--)
+    {
+        temp+=v2[v[i].first].first;
+        if(temp>days_of_scanning)
+        break;
+        else
+        sign_up_order.push_back(v1[i]);
+    }
+    int n=0;
+    while(day_sum<=days_of_scanning)
+    {
+        
+        
+    }
+}

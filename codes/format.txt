@@ -1,0 +1,211 @@
+#include<bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> 
+#include <ext/pb_ds/tree_policy.hpp> 
+using namespace __gnu_pbds; 
+typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> nds;
+using namespace std;
+#define int long long int
+#define pb push_back
+#define mk make_pair
+#define ff first
+#define ss second
+#define vpii vector<pair<int,int>>
+#define vpci vector<pair<char,int>>
+#define vi vector<int>
+#define mii map<int,int>
+#define mci map<char,int>
+#define msi map<string,int>
+#define fast_io  ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define endl '\n'
+int mod=1000000007;
+int mulmod(int a,int b,int c) 
+{ 
+
+    if (b==0) 
+        return 0; 
+ 
+    int s = mulmod(a, b/2, c); 
+
+    if (b%2==1) 
+        return (a%c+2*(s%c)) % c; 
+    else
+        return (2*(s%c)) % c; 
+} 
+int power(int x, int n) 
+{ 
+    int result = 1; 
+    while (n) { 
+        if (n & 1) 
+            result = result * x % mod; 
+        n = n / 2; 
+        x = x * x % mod; 
+    } 
+    return result; 
+}
+int gcd(int a, int b) 
+{ 
+    if (b == 0) 
+        return a; 
+    return gcd(b, a % b); 
+} 
+int findlcm(int arr[], int n) 
+{ 
+    int ans = arr[0]; 
+    for (int i = 1; i < n; i++) 
+        ans = (((arr[i] * ans)) / 
+                (gcd(arr[i], ans))); 
+  
+    return ans; 
+} 
+void Sieve(int n) 
+{ 
+    bool prime[n+1]; 
+    memset(prime, true, sizeof(prime)); 
+  
+    for (int p=2; p*p<=n; p++) 
+    { 
+        if (prime[p] == true) 
+        { 
+            for (int i=p*p; i<=n; i += p) 
+                prime[i] = false; 
+        } 
+    } 
+    for (int p=2; p<=n; p++) 
+       if (prime[p]) 
+          cout << p << " "; 
+}
+/*=========Segment Tree==========
+void buildTree(int *a,int *tree,int start,int end,int node)
+{
+    if(start==end)
+    {
+        tree[node]=a[start];
+        return;
+    }
+    int mid=(start+end)/2;
+    buildTree(a,tree,start,mid,2*node);
+    buildTree(a,tree,mid+1,end,2*node+1);
+    tree[node]=tree[2*node]+tree[2*node+1];
+}
+/*======for set======
+struct cmp
+{
+    bool operator()(pair<int,int> a,pair<int,int> b)
+    {
+        return((a.first-a.first/2)*a.second)>((b.first-b.first/2)*b.second);
+    }
+};
+*/
+void updateTree(int *a,int *tree,int start,int end,int node,int index,int value)
+{
+    if(start==end)
+    {
+        a[index]=value;
+        tree[node]=value;
+        return;
+    }
+    int mid=(start+end)/2;
+    if(index>mid)
+    updateTree(a,tree,mid+1,end,2*node+1,index,value);
+    else
+    updateTree(a,tree,start,mid,2*node,index,value);
+    tree[node]=tree[2*node]+tree[2*node+1];
+}
+int query(int *tree,int start,int end,int node,int left,int right)
+{
+    if(start>right || end<left)
+    return 0;
+    else if(start>=left && end<=right)
+    return tree[node];
+    else
+    {
+        int mid=(start+end)/2;
+        int ans1=query(tree,start,mid,2*node,left,right);
+        int ans2=query(tree,mid+1,end,2*node+1,left,right);
+        return ans1+ans2;
+    }
+}
+*/
+/*====DFS Path=======
+vector<int>* getPathHelper(int **edges,int n,int sv,int ev,bool *visited)
+{
+    if(sv==ev)
+    {
+        vector<int>* output=new vector<int>();
+        output->push_back(ev);
+        return output;
+    } 
+    visited[sv]=true;
+    for(int i=0;i<n;i++)
+    {
+        if(edges[sv][i]==1 && !visited[i])
+        {
+            vector<int>* smallOutput=getPathHelper(edges,n,i,ev,visited);
+            if(smallOutput!=NULL)
+            {
+                smallOutput->push_back(sv);
+                return smallOutput;
+            }
+        }
+    }
+    return NULL;
+}
+vector<int>* getPath(int **edges,int n,int sv,int ev)
+{
+    bool* visited=new bool[n];
+    for(int i=0;i<n;i++)
+    visited[i]=false;
+    vector<int>* output=getPathHelper(edges,n,sv,ev,visited);
+    return output;
+}
+*/
+/*========BFS Path====================
+vector<int> *getPath(int **edges,int n,int sv,int ev)
+{
+    queue<int> q;
+    bool *visited=new bool[n];
+    for(int i=0;i<n;i++)
+    visited[i]=false;
+    q.push(sv);
+    visited[sv]=true;
+    bool done=false;
+    map<int,int> m;
+    while(!q.empty() && !done)
+    {
+        int front=q.front();
+        q.pop();
+        for(int i=0;i<n;i++)
+        {
+            if(edges[front][i] && !visited[i])
+            {
+                m[i]=front;
+                q.push(i);
+                visited[i]=true;
+                if(i==ev)
+                {
+                    done=true;
+                    break;
+                }
+            }
+        }
+    }
+    if(!done)
+    return NULL;
+    else
+    {
+        vector<int> *output=new vector<int>();
+        int current=ev;
+        output->push_back(ev);
+        while(current!=sv)
+        {
+            current=m[current];
+            output->push_back(current);
+        }
+        return output;
+    }
+}
+*/
+int32_t main()
+{
+    
+}

@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+int blk;
+int a[200010];
+int mp[1000010]={0};
+int cnt=0;
+vector<pair<pair<int,int>,int> > v;
+vector<int> ans(200010);
+void add(int x)
+{
+	//cout<<x<<endl;
+	mp[a[x]]++;
+	if(mp[a[x]]==1)
+	cnt++;
+}
+void remove(int x)
+{
+	mp[a[x]]--;
+	if(mp[a[x]]==0)
+	cnt--;
+}
+bool cmp(pair<pair<int,int>,int> &a,pair<pair<int,int>,int> &b)
+{
+	if((a.first.first)/blk==(b.first.first)/blk)
+	return a.first.second<b.first.second;
+	else
+	return (a.first.first)/blk<(b.first.first)/blk;
+}
+void solve(int q)
+{
+	//cout<<"entered"<<endl;
+	sort(v.begin(),v.end(),cmp);
+	int lpointer=0,rpointer=0;
+	for(int i=0;i<v.size();i++)
+	{
+		int l=v[i].first.first;
+		int r=v[i].first.second;
+		while(lpointer<l)
+		{
+			//cout<<"1"<<endl;
+			remove(lpointer);
+			lpointer++;
+		}
+		while(lpointer>l)
+		{
+			add(lpointer-1);
+			lpointer--;
+		}
+		while(rpointer<=r)
+		{
+			//cout<<"2"<<endl;
+			add(rpointer);
+			rpointer++;
+			//cout<<cnt<<endl;
+		}
+		while(rpointer>r+1)
+		{
+			//cout<<"3"<<endl;
+			remove(rpointer-1);
+			rpointer--;
+		}
+		//cout<<v[i].second<<" "<<cnt<<endl;
+		ans[v[i].second]=cnt;
+	}
+	for(int i=0;i<q;i++)
+	cout<<ans[i]<<endl;
+}
+signed main()
+{
+	int n;
+	cin>>n;
+	for(int i=0;i<n;i++)
+	cin>>a[i];
+	blk=sqrt(n);
+	int q;
+	cin>>q;
+	for(int i=0;i<q;i++)
+	{
+		int l,r;
+		cin>>l>>r;
+		l--;
+		r--;
+		v.push_back(make_pair(make_pair(l,r),i));
+	}
+	solve(q);
+}

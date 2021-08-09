@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+#define set unordered_set
+void dfs1(vector<int>* edges,int *visited,int sv,stack<int> &finishedVertex)
+{
+    visited[sv]=1;
+    for(int i=0;i<edges[sv].size();i++)
+    {
+        if(!visited[edges[sv][i]])
+        dfs1(edges,visited,edges[sv][i],finishedVertex);
+    }
+    finishedVertex.push(sv);
+}
+void dfs2(vector<int>* edgesT,int *visitedT,int sv,set<int>* component)
+{
+    visitedT[sv]=1;
+    component->insert(sv);
+    for(int i=0;i<edgesT[sv].size();i++)
+    {
+        if(!visitedT[edgesT[sv][i]])
+        dfs2(edgesT,visitedT,edgesT[sv][i],component);
+    }
+}
+set<set<int>*>* getSCC(vector<int>* edges,vector<int>* edgesT,int n)
+{
+    int *visited=new int[n+1];
+    for(int i=0;i<n;i++)
+    visited[i]=0;
+    int *visitedT=new int[n+1];
+    for(int i=0;i<n;i++)
+    visitedT[i]=0;
+    stack<int> finishedVertex;
+    for(int i=0;i<n;i++)
+    {
+        if(!visited[i])
+        dfs1(edges,visited,i,finishedVertex);
+    }
+    set<set<int>*>* output=new set<set<int>*>();
+    while(!finishedVertex.empty())
+    {
+        int vertex=finishedVertex.top();
+        finishedVertex.pop();
+        if(visitedT[vertex]!=0)
+        continue;
+        set<int>* component=new set<int>();
+        dfs2(edgesT,visitedT,vertex,component);
+        output->insert(component);
+    }
+    return output;
+}
+int32_t main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,e;
+        cin>>n>>e;
+        vector<int>* edges=new vector<int>[n];
+        vector<int>* edgesT=new vector<int>[n];
+        for(int i=0;i<e;i++)
+        {
+            int x,y;
+            cin>>x>>y;
+            edges[x-1].push_back(y-1);
+            edgesT[y-1].push_back(x-1);
+        }
+        set<set<int>*>* output=getSCC(edges,edgesT,n);
+        set<set<int>*>::iterator it1;
+        for(it1=output->begin();it1!=output->end();it1++)
+        {
+            set<int>* component=*it1;
+            set<int>::iterator it2;
+            for(it2=component->begin();it2!=component->end();it2++)
+            cout<<*it2+1<<" ";
+            cout<<endl;
+        }
+    }
+}

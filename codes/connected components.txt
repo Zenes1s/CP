@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+void dfs(int *visited,vector<int>* edges,int sv,set<int>* components)
+{
+    components->insert(sv);
+    visited[sv]=1;
+    for(int i=0;i<edges[sv].size();i++)
+    {
+        int next=edges[sv][i];
+        if(!visited[next])
+        {
+            dfs(visited,edges,next,components);
+        }
+    }
+}
+set<set<int>*>* connectedComponents(vector<int>* edges,int n)
+{
+    int *visited=new int[n];
+    set<set<int>*>* output=new set<set<int>*>();
+    for(int i=0;i<n;i++)
+    visited[i]=0;
+    for(int i=0;i<n;i++)
+    {
+        if(!visited[i])
+        {
+            set<int>* component=new set<int>();
+            dfs(visited,edges,i,component);
+            output->insert(component);
+        }
+    }
+    return output;
+}
+int32_t main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int n,e;
+        cin>>n>>e;
+        vector<int>* edges=new vector<int>[n];
+        for(int i=0;i<e;i++)
+        {
+            int x,y;
+            cin>>x>>y;
+            edges[x-1].push_back(y-1);
+            edges[y-1].push_back(x-1);
+        }
+        set<set<int>*>* output=connectedComponents(edges,n);
+        set<set<int>*>::iterator it;
+        for(it=output->begin();it!=output->end();it++)
+        {
+            set<int>* component=*it;
+            set<int>::iterator it1;
+            for(it1=component->begin();it1!=component->end();it1++)
+            {
+                cout<<*it1+1<<" ";
+            }
+            cout<<endl;
+        }
+    }
+}

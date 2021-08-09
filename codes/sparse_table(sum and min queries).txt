@@ -1,0 +1,56 @@
+vector<vi> dp;
+// vector for efficient log2 function
+vi l2;
+void init(int n,int m)
+{
+    dp.resize(n);
+    l2.resize(n+1);
+    f(i,0,n-1)
+    dp[i].resize(m);
+    l2[1]=0;
+    f(i,2,n)
+    l2[i]=l2[i/2]+1;
+}
+// build for range minimum
+void build1(int a[], int n) 
+{ 
+    f(i,0,n-1)
+    dp[i][0]=a[i];
+    for(int j=1;(1<<j)<=n;j++)
+    {
+        for(int i=0;(i+(1<<j)-1)<n;i++)
+        dp[i][j]=min(dp[i][j-1],dp[i+(1<<(j-1))][j-1]);
+    }
+}
+// build for range sum
+void build2(int a[], int n) 
+{ 
+    f(i,0,n-1)
+    dp[i][0]=a[i];
+    for(int j=1;(1<<j)<=n;j++)
+    {
+        for(int i=0;(i+(1<<j)-1)<n;i++)
+        dp[i][j]=dp[i][j-1]+dp[i+(1<<(j-1))][j-1];
+    }
+}
+// for range minimum query
+int query1(int l,int r)
+{
+    int i=l2[r-l+1];
+    return min(dp[l][i],dp[r-(1<<i)+1][i]);
+}
+// for range sum query
+int query2(int l, int r) 
+{ 
+    int bit=16;
+    int sum=0;
+    for(int k=bit;k>=0;k--)
+    {
+        if(l+(1<<k)-1<=r)
+        {
+            sum+=dp[l][k];
+            l+=(1<<k);
+        }
+    }
+    return sum;
+}

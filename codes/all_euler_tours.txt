@@ -1,0 +1,52 @@
+int timer,n,m;
+int tin[200010],tout[200010];
+vi edges[200010];
+void euler_tour_1(int sv,int par)
+{
+    tin[sv]=timer++;
+    for(auto v:edges[sv])
+    {
+        if(v!=par)
+        {
+            euler_tour_1(v,sv);
+            tout[sv]=timer++;
+        }
+    }
+    return;
+}
+void euler_tour_2(int sv,int par)
+{
+    tin[sv]=timer++;
+    for(auto v:edges[sv])
+    {
+        if(v!=par)
+        {
+            euler_tour_2(v,sv);
+        }
+    }
+    tout[sv]=timer++;
+    return;
+}
+void euler_tour_3(int sv,int par)
+{
+    //for this tour keep timer=0
+    tin[sv]=++timer;
+    for(auto v:edges[sv])
+    {
+        if(v!=par)
+        {
+            euler_tour_3(v,sv);
+        }
+    }
+    tout[sv]=timer;
+    return;
+}
+// checks if x is ancestor of y
+// just be careful about <=, it may change to < and same for >=, depends on question.
+bool is_ancestor(int x,int y)
+{
+    if(tin[x]<=tin[y] && tout[x]>=tout[y])
+    return true;
+    else
+    return false;
+}

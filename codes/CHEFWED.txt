@@ -1,0 +1,145 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long int
+#define map unordered_map
+int no,k;
+int dp[1010][1010];
+int solve1(int a[],int n)
+{
+    int ans=INT_MAX;
+    for(int i=1;i<=n;i++)
+    {
+           int cnt=0;
+            //cout<<i<<"*"<<endl;
+            map<int,int> mp;
+            int tables=i;
+            for(int j=0;j<n;j++)
+            {
+                if(mp[a[j]]>0)
+                {
+                    if(tables==1)
+                    {
+                        if(mp[a[j]]==1)
+                        {
+                            mp[a[j]]++;
+                            cnt+=mp[a[j]];
+                        }
+                        else
+                        {
+                            cnt-=mp[a[j]];
+                            mp[a[j]]++;
+                            cnt+=mp[a[j]];
+                        }
+                    }
+                    else
+                    {
+                        //cout<<j<<endl;
+                        tables--;
+                        mp.clear();
+                        mp[a[j]]++;
+                    }
+                }
+                else
+                mp[a[j]]++;
+            }
+            //cout<<i*k+cnt<<endl;
+            ans=min(ans,i*k+cnt);
+        }
+        return ans;
+}
+int solve(int tables,int fights,vector<int> a)
+{
+    //cout<<tables*k+fights<<endl;
+    map<int,int> mp2;
+    int n=a.size();
+    if(fights==0)
+    {
+        dp[n][fights]=tables*k;
+        return tables*k;
+    }
+    if(dp[n][fights]!=-1)
+    return dp[n][fights];
+    int val=tables*k+fights;
+    int diff=INT_MAX;
+    int f1=0,f2=0;
+    int index;
+    for(int i=0;i<n;i++)
+    {
+        mp2[a[i]]++;
+        if(mp2[a[i]]>1)
+        {
+            //cout<<tables<<" "<<fights<<" "<<a[i]<<endl;
+            map<int,int> mp,mp1;
+            int fight1=0,fight2=0;
+            for(int j=i-1;j>=0;j--)
+            {
+                mp[a[j]]++;
+            }
+            for(int j=i;j<n;j++)
+            {
+                mp1[a[j]]++;
+            }
+            for(auto it=mp.begin();it!=mp.end();it++)
+            {
+                fight1+=(it->second>1)?it->second:0;
+            }
+            for(auto it=mp1.begin();it!=mp1.end();it++)
+            {
+                fight2+=(it->second>1)?it->second:0;
+            }
+            //cout<<fight1<<" "<<fight2<<endl;
+            if(abs(fight2-fight1)<diff)
+            {
+                diff=abs(fight2-fight1);
+                f1=fight1;
+                f2=fight2;
+                index=i;
+            }
+        }
+    }
+    vector<int> v1,v2;
+    for(int i=0;i<index;i++)
+    {
+        v1.push_back(a[i]);
+    }
+    for(int i=index;i<n;i++)
+    {
+        v2.push_back(a[i]);
+    }
+    val=min(val,(solve(tables+1,f1,v1)+solve(tables+1,f2,v2))-((tables+1)*k));
+    dp[n][fights]=val;
+    return val;
+}
+signed main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        cin>>no>>k;
+        memset(dp,-1,sizeof(dp));
+        int a[no];
+        vector<int> v;
+        map<int,int> mp;
+        for(int i=0;i<no;i++)
+        {
+            cin>>a[i];
+            v.push_back(a[i]);
+            mp[a[i]]++;
+        }
+        int fights=0;
+        for(auto it=mp.begin();it!=mp.end();it++)
+        {
+            fights+=(it->second>1?it->second:0);
+        }
+        int ans=min(solve(1,fights,v),solve1(a,no));
+        /*for(int i=1;i<=n;i++)
+        {
+            for(int j=0;j<=fights;j++)
+            cout<<dp[i][j]<<" ";
+            cout<<endl;
+        }*/
+        cout<<ans<<endl;
+        
+    }
+}

@@ -1,0 +1,41 @@
+void build(int s,int e,int index)
+{
+    if(s==e)
+    {
+        t[index]=a[s];
+        return;
+    }
+    int mid=(s+e)/2;
+    build(s,mid,2*index);
+    build(mid+1,e,2*index+1);
+    t[index]=min(t[2*index],t[2*index+1]);
+}
+int query(int l,int r,int s,int e,int index)
+{
+    if(s>=l && e<=r)
+    {
+        return t[index];
+    }
+    if(e<l || s>r)
+    {
+        return inf;
+    }
+    int mid=(s+e)/2;
+    int ans=min(query(l,r,s,mid,2*index),query(l,r,mid+1,e,2*index+1));
+    return ans;
+}
+void update(int inx,int val,int s,int e,int index)
+{
+    if(s>inx || e<inx)
+    return;
+    if(s==e)
+    {
+        a[inx]=val;
+        t[index]=val;
+        return;
+    }
+    int mid=(s+e)/2;
+    update(inx,val,s,mid,2*index);
+    update(inx,val,mid+1,e,2*index+1);
+    t[index]=min(t[2*index],t[2*index+1]);
+}

@@ -1,0 +1,15 @@
+1)https://discuss.codechef.com/t/graph-theory-complete-video-series-part-1-2-july2020-1practice-problem-added/46839
+2)Chef and Array
+3)Convair
+4)ttuple
+5)654 (D,E)
+6)653 DIV3(E2,F)
+7)Factor tree
+8)BIG input processing
+9) Escape one codechef
+10) Profitable Paths2
+11) mahesh and the lost array
+12)https://blog.codingblocks.com/2019/sites-and-tools-for-competitive-programming/
+13) https://www.topcoder.com/community/competitive-programming/tutorials/dynamic-programming-from-novice-to-advanced/
+14)https://discuss.codechef.com/t/sde-internship-for-1st-2nd-3rd-with-stipend-year-students-list-with-links/80368
+15)https://unacademy.com/a/build-your-own-search-application
